@@ -1,0 +1,44 @@
+{
+    "configurations": [
+        {
+            "browse": {
+                "databaseFilename": "",
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "includePath": [
+                "/home/vm/catkin_ws/devel/include/**",
+                "/opt/ros/kinetic/include/**",
+                "/home/vm/catkin_ws/src/beginner_tutorials/include/**",
+                "/home/vm/catkin_ws/src/bounding_box/include/**",
+                "/home/vm/catkin_ws/src/datmo_iith/include/**",
+                "/home/vm/catkin_ws/src/demo_launch/include/**",
+                "/home/vm/catkin_ws/src/drone_tracking/include/**",
+                "/home/vm/catkin_ws/src/geo_referencing/include/**",
+                "/home/vm/catkin_ws/src/ground_paper/include/**",
+                "/home/vm/catkin_ws/src/ground_removal/include/**",
+                "/home/vm/catkin_ws/src/multi_object_tracking_lidar/include/**",
+                "/home/vm/catkin_ws/src/my_developements/include/**",
+                "/home/vm/catkin_ws/src/my_improvements/include/**",
+                "/home/vm/catkin_ws/src/object_detection/include/**",
+                "/home/vm/catkin_ws/src/object_tracking/include/**",
+                "/home/vm/catkin_ws/src/ouster_example/ouster_client/include/**",
+                "/home/vm/catkin_ws/src/ouster_example/ouster_ros/include/**",
+                "/home/vm/catkin_ws/src/ouster_example/ouster_viz/include/**",
+                "/home/vm/catkin_ws/src/rotation_stable/include/**",
+                "/home/vm/catkin_ws/src/segmentation_test/include/**",
+                "/home/vm/catkin_ws/src/socket_pubsub/include/**",
+                "/home/vm/catkin_ws/src/using_markers/include/**",
+                "/home/vm/catkin_ws/src/velodyne/velodyne_driver/include/**",
+                "/home/vm/catkin_ws/src/velodyne/velodyne_laserscan/include/**",
+                "/home/vm/catkin_ws/src/velodyne/velodyne_pointcloud/include/**",
+                "/usr/include/**"
+            ],
+            "name": "ROS",
+            "intelliSenseMode": "gcc-x64",
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17"
+        }
+    ],
+    "version": 4
+}

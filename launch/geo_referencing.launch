@@ -1,0 +1,17 @@
+<launch>
+
+
+ <node name="realtime_groundremoval" pkg="geo_referencing" type="realtime_groundremoval" output="screen">
+</node>
+ <node name="geo_publish" pkg="geo_referencing" type="geo_publish" output="screen"> 
+</node>
+ <node name="realtime_georeferencing" pkg="geo_referencing" type="realtime_georeferencing" output="screen"> 
+</node>
+
+</launch>
+
+
+
+
+
+
