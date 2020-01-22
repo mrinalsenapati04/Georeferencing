@@ -66,6 +66,8 @@
 using namespace sensor_msgs;
 using namespace message_filters;
 
+ros::Publisher georeferenced_pub;
+
 void callback(const sensor_msgs::NavSatFix::ConstPtr &ins_msg, const sensor_msgs::PointCloud2::ConstPtr &msg)
 {
 
@@ -74,7 +76,7 @@ void callback(const sensor_msgs::NavSatFix::ConstPtr &ins_msg, const sensor_msgs
     double lon = gps_data.longitude;
     double height = gps_data.altitude;
     std::cout << "Lat lon height is " << lat << " " << lon << " " << height << std::endl;
-   // std::cout << "\n" <<std::endl;
+    // std::cout << "\n" <<std::endl;
     pcl::PointCloud<pcl::PointXYZI> cloud;
     pcl::fromROSMsg(*msg, cloud);
     pcl::PointCloud<pcl::PointXYZI>::Ptr input_cloud(new pcl::PointCloud<pcl::PointXYZI>);
@@ -92,6 +94,10 @@ void callback(const sensor_msgs::NavSatFix::ConstPtr &ins_msg, const sensor_msgs
     ec.setInputCloud(input_cloud);
     /* Extract the clusters out of pc and save indices in cluster_indices.*/
     ec.extract(cluster_indices);
+
+    //  sensor_msgs::PointCloud2 cloud_objects;
+    pcl::PointCloud<pcl::PointXYZ> object_positions;
+
     int j = 0;
     for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
     {
@@ -108,16 +114,31 @@ void callback(const sensor_msgs::NavSatFix::ConstPtr &ins_msg, const sensor_msgs
 
         std::vector<double> cen_llh = enu2llh(cen_enu, orgllh);
 
+        pcl::PointXYZ llh_point;
+        llh_point.x = cen_llh[0];
+        llh_point.y = cen_llh[1];
+        llh_point.z = cen_llh[2];
+       // std::cout << "Obj " << j << " locations are " << llh_point.x << " " << llh_point.y << " " << llh_point.z << std::endl;
+
+        // object_positions.push_back (pcl::PointXYZ (cen_llh[0],cen_llh[1],cen_llh[2]));
+        object_positions.push_back(llh_point);
+
         std::cout.precision(15);
-        std::cout << "Obj " << j << std::fixed << " locations are " << centroid[0] << " " << centroid[1] << " " << centroid[2] << " " << cen_llh[0] << " " << cen_llh[1] << " " << cen_llh[2] << std::endl;
-        
+          std::cout << "Obj " << j << std::fixed << " locations are " << centroid[0] << " " << centroid[1] << " " << centroid[2] << " " << cen_llh[0] << " " << cen_llh[1] << " " << cen_llh[2] << std::endl;
+
         j++;
         if (j > 10)
         {
             break;
         }
     }
-    std::cout << "\n\n\n"<<std::endl; 
+
+    // pcl::toROSMsg(object_positions, cloud_objects);
+
+    georeferenced_pub.publish(object_positions);
+
+    std::cout << "\n\n\n"
+              << std::endl;
 }
 
 int main(int argc, char **argv)
@@ -126,16 +147,16 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
     std::cout << "About to setup callback\n";
 
+    //   georeferenced_pub = nh.advertise<sensor_msgs::PointCloud2>("/georeferenced_topic", 1);
+    georeferenced_pub = nh.advertise<pcl::PointCloud<pcl::PointXYZ>>("/georeferenced_topic", 1);
+
     message_filters::Subscriber<sensor_msgs::PointCloud2> lidar_sub(nh, "/published_topic", 10);
     message_filters::Subscriber<sensor_msgs::NavSatFix> ins_sub(nh, "/gps_topic", 10);
 
-    //message_filters::TimeSynchronizer<sensor_msgs::NavSatFix, sensor_msgs::PointCloud2> sync(ins_sub, lidar_sub, 10);
-
-    //sync.registerCallback(boost::bind(&callback, _1, _2));
     typedef sync_policies::ApproximateTime<NavSatFix, PointCloud2> MySyncPolicy;
     Synchronizer<MySyncPolicy> sync(MySyncPolicy(100), ins_sub, lidar_sub);
     sync.registerCallback(boost::bind(&callback, _1, _2));
-    std::cout << "Here at the end \n";
+    // std::cout << "Here at the end \n";
 
     ros::spin();
     return 0;

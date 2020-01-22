@@ -92,6 +92,11 @@ void callback(const sensor_msgs::NavSatFix::ConstPtr &ins_msg, const sensor_msgs
     ec.setInputCloud(input_cloud);
     /* Extract the clusters out of pc and save indices in cluster_indices.*/
     ec.extract(cluster_indices);
+
+     //sensor_msgs::PointCloud2 cloud_msg;
+   
+
+
     int j = 0;
     for (std::vector<pcl::PointIndices>::const_iterator it = cluster_indices.begin(); it != cluster_indices.end(); ++it)
     {
@@ -107,6 +112,12 @@ void callback(const sensor_msgs::NavSatFix::ConstPtr &ins_msg, const sensor_msgs
         std::vector<double> orgllh = {lat, lon, height}; // Input lLiDAR's llh should be taken from INS
 
         std::vector<double> cen_llh = enu2llh(cen_enu, orgllh);
+
+     //   pcl::PointCloud<pcl::PointXYZ> points(cen_llh[0],cen_llh[1],cen_llh[2]);
+        
+        
+
+
 
         std::cout.precision(15);
         std::cout << "Obj " << j << std::fixed << " locations are " << centroid[0] << " " << centroid[1] << " " << centroid[2] << " " << cen_llh[0] << " " << cen_llh[1] << " " << cen_llh[2] << std::endl;
@@ -126,6 +137,9 @@ int main(int argc, char **argv)
     ros::NodeHandle nh;
     std::cout << "About to setup callback\n";
 
+ //  ros::Publisher pub = nh.advertise<sensor_msgs::PointCloud2>("/georeferenced_topic", 1);
+   // ros::Publisher georeferenced_pub = nh.advertise<pcl::PointCloud<pcl::PointXYZ> > ("/georeferenced_topic", 1);
+
     message_filters::Subscriber<sensor_msgs::PointCloud2> lidar_sub(nh, "/published_topic", 10);
     message_filters::Subscriber<sensor_msgs::NavSatFix> ins_sub(nh, "/gps_topic", 10);
 
@@ -135,7 +149,7 @@ int main(int argc, char **argv)
     typedef sync_policies::ApproximateTime<NavSatFix, PointCloud2> MySyncPolicy;
     Synchronizer<MySyncPolicy> sync(MySyncPolicy(100), ins_sub, lidar_sub);
     sync.registerCallback(boost::bind(&callback, _1, _2));
-    std::cout << "Here at the end \n";
+   // std::cout << "Here at the end \n";
 
     ros::spin();
     return 0;

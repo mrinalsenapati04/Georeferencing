@@ -226,8 +226,11 @@ target_link_libraries(geo_pointcloud ${catkin_LIBRARIES} geo_referencing)
 add_executable(realtime_georeferencing src/realtime_georeferencing.cpp)
 target_link_libraries(realtime_georeferencing ${catkin_LIBRARIES} geo_referencing)
 
-#add_executable(demo src/demo.cpp)
-#target_link_libraries(demo ${catkin_LIBRARIES} geo_referencing)
+add_executable(demo src/demo.cpp)
+target_link_libraries(demo ${catkin_LIBRARIES} geo_referencing)
+
+add_executable(show_points src/show_points.cpp)
+target_link_libraries(show_points ${catkin_LIBRARIES} geo_referencing)
 
 
 #target_link_libraries(main ${catkin_LIBRARIES} ${PCL_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES} datmo_iith)
