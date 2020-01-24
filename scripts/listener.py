@@ -13,7 +13,7 @@ import time
 
 world = geopandas.read_file(geopandas.datasets.get_path('naturalearth_lowres'))
 ax = world[world.continent == 'Asia'].plot(color='white', edgecolor='black')
-
+plt.ion()
 def callback(ros_cloud):
     # rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
     points_list = []
@@ -39,10 +39,10 @@ def callback(ros_cloud):
     #plt.show(block=False)
     #time.sleep(0.1)
     #plt.close('all')
+    #plt.clf()
     plt.draw()
-    plt.pause(0.1)
-    plt.clf()
-
+    plt.pause(1)
+    gdf.plot(ax=ax, color='white', edgecolor='white')
 
 
 
