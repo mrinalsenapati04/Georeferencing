@@ -1,1 +1,2 @@
+# Georeferencing
 Georeferencing is the process by which local co-ordinate system data is converted into World Geodatic System (WGS). In WGS, each location of the earth is represented by lattitude and longitude. In general, camera images or LiDAR point cloud data are taken from the sensor in local co-ordinate values. By converting this data using geo-referencing process, will be helpfull for identifying objects globally. 
